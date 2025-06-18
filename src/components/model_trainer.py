@@ -47,7 +47,48 @@ class ModelTrainer:
                 "AdaBoost Classifire": AdaBoostRegressor(),
             }
 
-            model_report:dict = evaluate_models(X_train, y_train, X_test, y_test, models)
+            params = {
+                "Random Forest": {
+                    # "criterion": ["squared_error", "friedman_mse", "absolute_error", "poisson"],
+                    # "max_features": ["auto", "sqrt", "log2"],
+                    "n_estimators": [8, 16, 32, 64, 128, 256],
+                },
+                "Decison Tree": {
+                    "criterion": ["squared_error", "friedman_mse", "absolute_error", "poisson"],
+                    # "max_features": ["auto", "sqrt", "log2"],
+                    # "splitter": ["best", "random"],
+                },
+                "Gradient Boosting": {
+                    "loss": ["squared_error", "absolute_error", "huber", "quantile"],
+                    #  "criterion": ["squared_error", "friedman_mse"],
+                    "learning_rate": [0.01, 0.1, 0.05, 0.001],
+                    "n_estimators": [8, 16, 32, 64, 128, 256],
+                    # "max_features": ["auto", "sqrt", "log2"],
+                    "subsample": [0.6, 0.7,0.8, 0.9, 1.0]
+                },
+                "Linear Regression": {},
+                "K-Neighbors Classifier": {
+                    "n_neighbors": [5, 7, 9, 11],
+                    # "weights": ["uniform", "distance"],
+                    # "algorithm": ["ball_tree", "kd_tree", "brute"],
+                },
+                "XGBClassifier": {
+                    "learning_rate": [0.01, 0.1, 0.05, 0.001],
+                    "n_estimators": [8, 16, 32, 64, 128, 256]
+                },
+                "CatBoosing Classifier": {
+                    "depth": [6, 8, 10],
+                    "learning_rate": [0.01, 0.05, 0.001],
+                    "iterations": [30, 50, 100],
+                },
+                "AdaBoost Classifire": {
+                    "n_estimators": [8, 16, 32, 64, 128, 256],
+                    # "loss": ["linear", "square", "exponential"],
+                    "learning_rate": [0.01, 0.1, 0.5, 1.0]
+                },
+            }
+
+            model_report:dict = evaluate_models(X_train, y_train, X_test, y_test, models, params)
 
             # to get best model score from dict
             best_model_score = max(sorted(model_report.values()))
